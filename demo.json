@@ -1,0 +1,168 @@
+{ 
+  "state": {
+    "Town Square": {
+      "DESC": "The town square is a large open space with a fountain in the center. Streets lead in all directions.",
+      "north": "North Y Street",
+      "east": "East X Street",
+      "south": "South Y Street",
+      "west": "West X Street",
+      "GROUND": ["Welcome Sign", "Fountain"]},
+    "North Y Street": {
+      "DESC": "The northern end of Y Street has really gone down hill. Pot holes are everywhere, as are stray cats, rats, and wombats.",
+      "west": "Thief Guild",
+      "east": "Bakery",
+      "south": "Town Square",
+      "GROUND": ["Do Not Take Sign Sign"]},
+    "Thief Guild": {
+      "DESC": "The Thief Guild is a dark den of unprincipled types. You clutch your purse (though several other people here would like to clutch your purse as well).",
+      "south": "West X Street",
+      "east": "North Y Street",
+      "GROUND": ["Lock Picks", "Silly Glasses"]},
+    "Bakery": {
+      "DESC": "The delightful smell of meat pies fills the air, making you hungry. The baker flashes a grin, as he slides a box marked `Not Human Organs` under a table with his foot.",
+      "west": "North Y Street",
+      "south": "East X Street",
+      "SHOP": ["Meat Pie", "Donut", "Bagel"],
+      "GROUND": ["Shop Howto"]},
+    "West X Street": {
+      "DESC": "West X Street is the rich section of town. So rich, they paved the streets with gold. This probably was not a good idea. The thief guild opened up the next day.",
+      "north": "Thief Guild",
+      "east": "Town Square",
+      "south": "Blacksmith",
+      "west": "Used Anvils Store",
+      "GROUND": []},
+    "Used Anvils Store": {
+      "DESC": "The anvil store has anvils of all types and sizes, each previously-owned but still in servicable condition. However, due to a bug in the way this game is designed, you can buy anvils like any other item and walk around, but if you drop them they cannot be picked up since their TAKEABLE value is set to false. The code should be changed so that it\"s not possible for shops to sell items with TAKEABLE set to false.",
+      "east": "West X Street",
+      "SHOP": ["Anvil"],
+      "GROUND": ["Anvil", "Anvil", "Anvil", "Anvil"]},
+    "East X Street": {
+      "DESC": "East X Street. It\"s like X Street, except East.",
+      "north": "Bakery",
+      "west": "Town Square",
+      "south": "Wizard Tower",
+      "GROUND": []},
+    "Blacksmith": {
+      "DESC": "The blacksmith loudly hammers a new sword over her anvil. Swords, axes, butter knives all line the walls of her workshop, available for a price.",
+      "north": "West X Street",
+      "east": "South Y Street",
+      "SHOP": ["Sword", "War Axe", "Chainmail T-Shirt"],
+      "GROUND": ["Anvil", "Shop Howto"]},
+    "South Y Street": {
+      "DESC": "The Christmas Carolers of South Y Street are famous for all legally changing their name to Carol. They are also famous for singing year-round, in heavy fur coats and wool mittens, even in the summer. That\"s dedication to their craft!",
+      "north": "Town Square",
+      "west": "Blacksmith",
+      "GROUND": []},
+    "Wizard Tower": {
+      "DESC": "Zanny magical antics are afoot in the world-famous Wizard Tower. Cauldrons bubble, rats talk, and books float midair in this center of magical discovery.",
+      "north": "East X Street",
+      "up": "Observation Deck",
+      "GROUND": ["Crystal Ball", "Floating Book", "Floating Book"]},
+    "Observation Deck": {
+      "DESC": "You can see the entire town from the top of the Wizard Tower. Everybody looks like ants, especially the people transformed into ants by the wizards of the tower!",
+      "down": "Wizard Tower",
+      "up": "Magical Escalator to Nowhere",
+      "GROUND": ["Telescope"]},
+    "Magical Escalator to Nowhere": {
+      "DESC": "No matter how much you climb the escalator, it doesn\"t seem to be getting you anywhere.",
+      "up": "Magical Escalator to Nowhere",
+      "down": "Observation Deck",
+      "GROUND": []}
+  },
+  "things": {
+    "Welcome Sign": {
+      "GROUNDDESC": "A welcome sign stands here.",
+      "SHORTDESC": "a welcome sign",
+      "LONGDESC": "The welcome sign reads, `Welcome to this text adventure demo. You can type `help` for a list of commands to use. Be sure to check out Al\"s cool programming books at http://inventwithpython.com`",
+      "TAKEABLE": false,
+      "DESCWORDS": ["welcome", "sign"]},
+    "Do Not Take Sign Sign": {
+      "GROUNDDESC": "A sign stands here, not bolted to the ground.",
+      "SHORTDESC": "a sign",
+      "LONGDESC": "The sign reads, `Do Not Take This Sign`",
+      "DESCWORDS": ["sign"]},
+    "Fountain": {
+      "GROUNDDESC": "A bubbling fountain of green water.",
+      "SHORTDESC": "a fountain",
+      "LONGDESC": "The water in the fountain is a bright green color. Is that... gatorade?",
+      "TAKEABLE": false,
+      "DESCWORDS": ["fountain"]},
+    "Sword": {
+      "GROUNDDESC": "A sword lies on the ground.",
+      "SHORTDESC": "a sword",
+      "LONGDESC": "A longsword, engraved with the word, `Exkaleber`",
+      "DESCWORDS": ["sword", "exkaleber", "longsword"]},
+    "War Axe": {
+      "GROUNDDESC": "A mighty war axe lies on the ground.",
+      "SHORTDESC": "a war axe",
+      "LONGDESC": "The mighty war axe is made with antimony impurities from a fallen star, rendering it surpassingly brittle.",
+      "DESCWORDS": ["axe", "war", "mighty"]},
+    "Chainmail T-Shirt": {
+      "GROUNDDESC": "A chainmail t-shirt lies wadded up on the ground.",
+      "SHORTDESC": "a chainmail t-shirt",
+      "LONGDESC": "The chainmail t-shirt has a slogan and arrow engraved on the front: `I\"m with Stupid`",
+      "DESCWORDS": ["chainmail", "chain", "mail", "t-shirt", "tshirt", "stupid"]},
+    "Anvil": {
+      "GROUNDDESC": "The blacksmith\"s anvil, far too heavy to pick up, rests in the corner.",
+      "SHORTDESC": "an anvil",
+      "LONGDESC": "The black anvil has the word `ACME` engraved on the side.",
+      "TAKEABLE": false,
+      "DESCWORDS": ["anvil"]},
+    "Lock Picks": {
+      "GROUNDDESC": "A set of lock picks lies on the ground.",
+      "SHORTDESC": "a set of lock picks",
+      "LONGDESC": "A set of fine picks for picking locks.",
+      "DESCWORDS": ["lockpicks", "picks", "set"]},
+    "Silly Glasses": {
+      "GROUNDDESC": "A pair of those silly gag glasses with the nose and fake mustache rest on the ground.",
+      "SHORTDESC": "a pair of silly fake mustache glasses",
+      "LONGDESC": "These glasses have a fake nose and mustache attached to them. The perfect disguise!",
+      "DESCWORDS": ["glasses", "silly", "fake", "mustache"]},
+    "Meat Pie": {
+      "GROUNDDESC": "A suspicious meat pie rests on the ground.",
+      "SHORTDESC": "a meat pie",
+      "LONGDESC": "A meat pie. It tastes like chicken.",
+      "EDIBLE": true,
+      "DESCWORDS": ["pie", "meat"]},
+    "Bagel": {
+      "GROUNDDESC": "A bagel rests on the ground. (Gross.)",
+      "SHORTDESC": "a bagel",
+      "LONGDESC": "It is a donut-shaped bagel.",
+      "EDIBLE": true,
+      "DESCWORDS": ["bagel"]},
+    "Donut": {
+      "GROUNDDESC": "A donut rests on the ground. (Gross.)",
+      "SHORTDESC": "a donut",
+      "LONGDESC": "It is a bagel-shaped donut.",
+      "EDIBLE": true,
+      "DESCWORDS": ["donut"]},
+    "Crystal Ball": {
+      "GROUNDDESC": "A glowing crystal ball rests on a small pillow.",
+      "SHORTDESC": "a crystal ball",
+      "LONGDESC": "The crystal ball swirls with mystical energy, forming the words `Answer Unclear. Check Again Later.`",
+      "DESCWORDS": ["crystal", "ball"]},
+    "Floating Book": {
+      "GROUNDDESC": "A magical book floats here.",
+      "SHORTDESC": "a floating book",
+      "LONGDESC": "This magical tomb doesn\"t have a lot of pictures in it. Boring!",
+      "DESCWORDS": ["book", "floating"]},
+    "Telescope": {
+      "GROUNDDESC": "A telescope is bolted to the ground.",
+      "SHORTDESC": "a telescope",
+      "LONGDESC": "Using the telescope, you can see your house from here!",
+      "TAKEABLE": false,
+      "DESCWORDS": ["telescope"]},
+    "README Note": {
+      "GROUNDDESC": "A note titled `README` rests on the ground.",
+      "SHORTDESC": "a README note",
+      "LONGDESC": "The README note reads, `Welcome to the text adventure demo. Be sure to check out the source code to see how this game is put together.`",
+      "EDIBLE": true,
+      "DESCWORDS": ["readme", "note"]},
+    "Shop Howto": {
+      "GROUNDDESC": "A `Shopping HOWTO` note rests on the ground.",
+      "SHORTDESC": "a shopping howto",
+      "LONGDESC": "The note reads, `When you are at a shop, you can type `list` to show what is for sale. `buy <item>` will add it to your inventory, or you can sell an item in your inventory with `sell <item>`. (Currently, money is not implemented in this program.)",
+      "EDIBLE": true,
+      "DESCWORDS": ["howto", "note", "shop"]}
+  }
+}
