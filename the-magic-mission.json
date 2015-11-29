@@ -1,0 +1,156 @@
+{ 
+  "state": {
+    "castle tower": {
+      "DESC": "You wake up on the cold, stone floor. A rectangle of orange light strike the floor. You see a man dressed black trench coat. He says to you, \"the wizard request you to go on a quest. A book you will take or maybe just make. A shell which will wisper and tell. A cloth as big as a blanket. Everything else you will find on your way.\"",  
+      "north": "Hillside Street",
+      "east": "Harbor Street",
+      "GROUND": ["orange rectangle"]},
+    "Hillside Street": {
+      "DESC": "The beautiful statue of Ben Franklin with flowers around the statue of Ben Franklin. A women is selling flowers",
+      "west": "Hillside Park",
+      "east": "Bakery",
+      "south": "castle tower",
+      "GROUND": ["flowers"]},
+    "Harbor Street": {
+      "DESC": " there are seagulls flying over the water. People are walking onto the dock and sailing away with woooden rafts.",
+      "west": "castle tower",
+      "east": "sea",
+      "north": "Bakery",
+      "GROUND": ["sand", "broken raft"]},
+    "Bakery": {
+      "DESC": "The delightful smell of meat pies fills the air, making you hungry. The baker flashes a grin, as he slides a box marked `Not Human Organs` under a table with his foot.",
+      "west": "Hillside Street",
+      "south": "Harbor Street",
+      "SHOP": ["Meat Pie", "Donut", "Bagel", "shrimp samwich"],
+      "GROUND": ["newspaper"]},
+    "sea": {
+      "DESC": "You're on the wooden raft that was for sale. It was broken. The raft is a drift heading down wind east.",
+      "north": "North Sea",
+      "south": "sea",
+      "west": "Harbor Street",
+      "GROUND": ["brown stick", "drift would"]},
+    "North Sea": {
+      "DESC": "Your used the cloth to make the sail. And the wind is caring you north. Off on the distance, you see a island.",
+      "east": "east island",
+      "south": "sea",
+      "north": "North Sea",
+      "GROUND": ["holey drift wood"]},
+    "east island": {
+      "DESC": "east island is very sandy with some bushes and trees with some hills and a big swamp in the middle.",
+      "north": "North Sea",
+      "west": "North Sea",
+      "south": "east sea ",
+      "east": "swamp",
+      "GROUND": ["shells"]},
+    "swamp": {
+      "DESC": "The swamp is very swampy. There is lots of misketos. There water is very cold. In the corner of the swamp, you see a aligator stuck in a net suffering.",
+      "down": "aligator",
+      "west": "east island",
+      "GROUND": ["holey drift wood", "aligator"]},
+      "aligator": {
+      "DESC": "You jump into the swamp to help the aligator. You free the aligator from the net and notice a stick at the bottom of the swamp that has silver swerls on it.",
+      "down": "aligator",
+      "west": "east island",
+      "GROUND": ["stick"]
+    }
+  },
+  "things": {
+    "orange rectangle": {
+      "GROUNDDESC": "A rectangle of light.",
+      "SHORTDESC": "light",
+      "LONGDESC": "The morning light streaming in through the open window.",
+      "TAKEABLE": false,
+      "DESCWORDS": ["rectangle", "light", "orange"]},
+    "aligator": {
+      "GROUNDDESC": "An aligator is stuck in a net.",
+      "SHORTDESC": "aligator",
+      "LONGDESC": "I'm so tired and hurt from this net tangled around me.",
+      "TAKEABLE": false,
+      "DESCWORDS": ["aligator"]},
+    "net": {
+      "GROUNDDESC": "A net is wrapped around the aligator.",
+      "SHORTDESC": "a fishing net",
+      "TAKEABLE": true,
+      "LONGDESC": "You have untangled the net from around the aligator and he gives you a stick.",
+      "DESCWORDS": ["sign"]},
+    "flowers": {
+      "GROUNDDESC": "A bunch of flowers wrapped in a ribbon.",
+      "SHORTDESC": "a bunch of flowers",
+      "TAKEABLE": true,
+      "LONGDESC": "the flowers are red, pink, yellow, and orange. there are about a dozen in each ribbon. They have a 4 inch long stem attached to the flower.",
+      "DESCWORDS": ["flowers", "flower", "bunch"]},
+          "Meat Pie": {
+      "GROUNDDESC": "A suspicious meat pie rests on the ground.",
+      "SHORTDESC": "a Meat pie",
+      "LONGDESC": "A meat pie. It tastes like chicken.",
+      "EDIBLE": true,
+      "DESCWORDS": ["pie", "meat"]},
+    "Bagel": {
+      "GROUNDDESC": "A bagel rests on the ground. (Gross.)",
+      "SHORTDESC": "a bagel",
+      "LONGDESC": "It is a donut-shaped bagel.",
+      "EDIBLE": true,
+      "DESCWORDS": ["bagel"]},
+    "Donut": {
+      "GROUNDDESC": "A donut rests on the ground. (Gross.)",
+      "SHORTDESC": "a donut",
+      "LONGDESC": "It is a bagel-shaped donut.",
+      "EDIBLE": true,
+      "DESCWORDS": ["donut"]},
+    "newspaper": {
+      "GROUNDDESC": "A newspaper with the headline \"Strike Leaves Sailors Adrift\"",
+      "SHORTDESC": "the newspaper",
+      "TAKEABLE": true,
+      "LONGDESC": "The newspaper article describes how the stike by the local ship builders guild has left several boats unfinished.",
+      "DESCWORDS": ["newspaper", "paper"]},
+    "sand": {
+      "GROUNDDESC": "white sand.",
+      "SHORTDESC": " The white sand is very deep. ",
+      "TAKEABLE": false,
+      "LONGDESC": "The white sand is so deep that it takes you an hour till you reach water.",
+      "DESCWORDS": ["white", "sand"]},
+    "brown stick": {
+      "GROUNDDESC": "a brown stick",
+      "SHORTDESC": "the stick",
+      "LONGDESC": "You realize that it's the other part the wand for the wizard.",
+      "TAKEABLE": true,
+      "DESCWORDS": ["brown", "stick"]},
+  "broken raft": {
+      "GROUNDDESC": "wood on the sand",
+      "LONGDESC": "You don't see a sail but you do see a rope and logs and boardes.",
+      "SHORTDESC":"You see a pile of wood.",
+      "TAKEABLE": true,
+      "DESCWORDS": ["broken", "raft", "wood"]},
+  "raft": {
+      "GROUNDDESC": "a wooden raft",
+      "LONGDESC": "A wooden raft with a sail and a sign that says \"SOLD\".",
+      "SHORTDESC":"A wooden raft.",
+      "TAKEABLE": false,
+      "DESCWORDS": ["raft"]},
+  "drift wood": {
+      "GROUNDDESC": "There is drift wood in the water.",
+      "LONGDESC": "Their is a lot of wood and some have holes and some don't. One of the peices of drift wood was very thin and you noticed a gold rim at the bottom of the wood.",
+      "SHORTDESC":"drift wood.",
+      "TAKEABLE": true,
+      "DESCWORDS": ["drift wood", "wood"]},
+  "holey drift wood": {
+      "GROUNDDESC": "There is drift wood in the water.",
+      "LONGDESC": "Their is a lot of wood full of worm holes.",
+      "SHORTDESC":"drift wood.",
+      "TAKEABLE": true,
+      "DESCWORDS": ["wood", "drift wood"]},
+  "shells": {
+      "GROUNDDESC": "colorful things on the white sand.",
+      "LONGDESC": "You are sailing twords the island ans on the island you see colorful shells, butterfly shape shells, and broken shells",
+      "SHORTDESC":"a handful of shells.",
+      "TAKEABLE": true,
+      "DESCWORDS": ["shells"]},
+     "stick": {
+      "GROUNDDESC": "a introsting stick.",
+      "LONGDESC": "When You jump in, you see there are silver swirls.",
+      "SHORTDESC":"half of a wand.",
+      "TAKEABLE": true,
+      "DESCWORDS": ["stick", "silver swirl stick"]}
+    }
+  }
+

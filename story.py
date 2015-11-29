@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """
 A text adventure engine for willchatterr
 
@@ -12,7 +13,7 @@ import json
 import cmd
 import textwrap
 
-world = json.load(open('demo.json', 'r'))
+world = json.load(open('the-magic-mission.json', 'r'))
 
 state = world['state']
 THINGS = world['things']
@@ -26,17 +27,6 @@ that preserves connections and distances in a small number of dimensions, usuall
 3. This is 2-D embedding so it's just a flat map like you'd see in a D&D Dungeon Master's
 play book.
 
-        +---------+    +---------+
-        | Thief   O    | Bakery  |
-        | Guild   |    |         |
-+------++------O--+    +----O----+
-| Used |
-|Anvils|        Town Square     +--------+
-|      O                        |Obs Deck|
-+------++----O----+    +----O----/  /
-        | Black-  O    | Wizard /  /
-        | smith   |    | Tower    /
-        +---------+    +---------+
 """
 
 
@@ -51,8 +41,8 @@ DESCWORDS = 'DESCWORDS'
 
 SCREEN_WIDTH = 80
 
-location = 'Town Square'  # start in town square
-inventory = ['README Note', 'Sword', 'Donut']  # start with blank inventory
+location = 'castle tower'  # start in town square
+inventory = []  # start with blank inventory
 showFullExits = True
 
 
@@ -394,6 +384,17 @@ class TextAdventureCmd(cmd.Cmd):
 
         return list(set(possibleItems))  # make list unique
 
+    def do_talk_to(self, arg):
+        """Start a conversation with an element of the game."""
+        if "characters" not in state[location]:
+            print("You can only talk to animate objects!")
+            return
+
+        arg = arg.lower()
+
+        for item in state[location]["characters"]:
+            if arg == 'item':
+                print('\n'.join(textwrap.wrap(THINGS[item][LONGDESC], SCREEN_WIDTH)))
 
     def do_list(self, arg):
         """List the items for sale at the current location's shop. "list full" will show details of the items."""
