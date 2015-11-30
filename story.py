@@ -9,21 +9,28 @@ techniques and snippets from http://inventwithpython.com/blog/2014/12/11/
 making-a-text-adventure-game-with-the-cmd-and-textwrap-python-modules/
 """
 from __future__ import print_function
+import os
 import json
 import cmd
 import textwrap
 
-world = json.load(open('the-magic-mission.json', 'r'))
+FSM = 'the-magic-mission.json'
 
+if os.path.isfile(FSM):
+    f = open(FSM, 'r')
+else:
+    f = open(os.path.join('ta', FSM))
+with f:
+    world = json.load(f)
 state = world['state']
-THINGS = world['things']
+    things = world['things']
 
 """
 First, we will create some data structures for our game world.
 
-The demo.json file contains a network of states (nodes) copied, but refactored from the
-textadventuredemo exmple. Here's a 2-D "embedding" of the demo.json graph. An embedding is just a projection
-that preserves connections and distances in a small number of dimensions, usually 2 or
+The FSM (demo.json or the-magic-mission.json) files contain networks of states (nodes) copied, but refactored from the
+textadventuredemo exmple by Al Sweigart. It may be helpful to include a 2-D "embedding" of the demo.json graph as Al did using ASCII art.
+An embedding is just a projection that preserves connections and distances in a small number of dimensions, usually 2 or
 3. This is 2-D embedding so it's just a flat map like you'd see in a D&D Dungeon Master's
 play book.
 
@@ -59,7 +66,7 @@ def displayLocation(loc):
     if len(state[loc][GROUND]) > 0:
         print()
         for item in state[loc][GROUND]:
-            print(THINGS[item][GROUNDDESC])
+            print(things[item][GROUNDDESC])
 
     # Print all the exits.
     exits = []
@@ -92,7 +99,7 @@ def getAllDescWords(itemList):
     itemList = list(set(itemList))  # make itemList unique
     descWords = []
     for item in itemList:
-        descWords.extend(THINGS[item][DESCWORDS])
+        descWords.extend(things[item][DESCWORDS])
     return list(set(descWords))
 
 def getAllFirstDescWords(itemList):
@@ -101,13 +108,13 @@ def getAllFirstDescWords(itemList):
     itemList = list(set(itemList))  # make itemList unique
     descWords = []
     for item in itemList:
-        descWords.append(THINGS[item][DESCWORDS][0])
+        descWords.append(things[item][DESCWORDS][0])
     return list(set(descWords))
 
 def getFirstItemMatchingDesc(desc, itemList):
     itemList = list(set(itemList))  # make itemList unique
     for item in itemList:
-        if desc in THINGS[item][DESCWORDS]:
+        if desc in things[item][DESCWORDS]:
             return item
     return None
 
@@ -115,7 +122,7 @@ def getAllItemsMatchingDesc(desc, itemList):
     itemList = list(set(itemList))  # make itemList unique
     matchingItems = []
     for item in itemList:
-        if desc in THINGS[item][DESCWORDS]:
+        if desc in things[item][DESCWORDS]:
             matchingItems.append(item)
     return matchingItems
 
@@ -217,10 +224,10 @@ class TextAdventureCmd(cmd.Cmd):
 
         # get the item name that the player's command describes
         for item in getAllItemsMatchingDesc(itemToTake, state[location][GROUND]):
-            if THINGS[item].get(TAKEABLE, True) == False:
+            if things[item].get(TAKEABLE, True) == False:
                 cantTake = True
                 continue  # there may be other items named this that you can take, so we continue checking
-            print('You take %s.' % (THINGS[item][SHORTDESC]))
+            print('You take %s.' % (things[item][SHORTDESC]))
             state[location][GROUND].remove(item)  # remove from the ground
             inventory.append(item)  # add to inventory
             return
@@ -247,7 +254,7 @@ class TextAdventureCmd(cmd.Cmd):
         # get the item name that the player's command describes
         item = getFirstItemMatchingDesc(itemToDrop, inventory)
         if item is not None:
-            print('You drop %s.' % (THINGS[item][SHORTDESC]))
+            print('You drop %s.' % (things[item][SHORTDESC]))
             inventory.remove(item)  # remove from inventory
             state[location][GROUND].append(item)  # add to the ground
 
@@ -261,8 +268,8 @@ class TextAdventureCmd(cmd.Cmd):
 
         # otherwise, get a list of all "description words" for ground items matching the command text so far:
         for item in list(set(state[location][GROUND])):
-            for descWord in THINGS[item][DESCWORDS]:
-                if descWord.startswith(text) and THINGS[item].get(TAKEABLE, True):
+            for descWord in things[item][DESCWORDS]:
+                if descWord.startswith(text) and things[item].get(TAKEABLE, True):
                     possibleItems.append(descWord)
 
         return list(set(possibleItems))  # make list unique
@@ -328,13 +335,13 @@ class TextAdventureCmd(cmd.Cmd):
         # see if the item being looked at is on the ground at this location
         item = getFirstItemMatchingDesc(lookingAt, state[location][GROUND])
         if item is not None:
-            print('\n'.join(textwrap.wrap(THINGS[item][LONGDESC], SCREEN_WIDTH)))
+            print('\n'.join(textwrap.wrap(things[item][LONGDESC], SCREEN_WIDTH)))
             return
 
         # see if the item being looked at is in the inventory
         item = getFirstItemMatchingDesc(lookingAt, inventory)
         if item is not None:
-            print('\n'.join(textwrap.wrap(THINGS[item][LONGDESC], SCREEN_WIDTH)))
+            print('\n'.join(textwrap.wrap(things[item][LONGDESC], SCREEN_WIDTH)))
             return
 
         print("You do not see '{}' on the ground nearby and you aren't carrying it with you.".format(lookingAt))
@@ -394,7 +401,7 @@ class TextAdventureCmd(cmd.Cmd):
 
         for item in state[location]["characters"]:
             if arg == 'item':
-                print('\n'.join(textwrap.wrap(THINGS[item][LONGDESC], SCREEN_WIDTH)))
+                print('\n'.join(textwrap.wrap(things[item][LONGDESC], SCREEN_WIDTH)))
 
     def do_list(self, arg):
         """List the items for sale at the current location's shop. "list full" will show details of the items."""
@@ -408,7 +415,7 @@ class TextAdventureCmd(cmd.Cmd):
         for item in state[location][SHOP]:
             print('  - %s' % (item))
             if arg == 'full':
-                print('\n'.join(textwrap.wrap(THINGS[item][LONGDESC], SCREEN_WIDTH)))
+                print('\n'.join(textwrap.wrap(things[item][LONGDESC], SCREEN_WIDTH)))
 
 
     def do_buy(self, arg):
@@ -428,7 +435,7 @@ class TextAdventureCmd(cmd.Cmd):
             # NOTE - If you wanted to implement money, here is where you would add
             # code that checks if the player has enough, then deducts the price
             # from their money.
-            print('You have purchased %s' % (THINGS[item][SHORTDESC]))
+            print('You have purchased %s' % (things[item][SHORTDESC]))
             inventory.append(item)
             return
 
@@ -447,7 +454,7 @@ class TextAdventureCmd(cmd.Cmd):
 
         # otherwise, get a list of all "description words" for shop items matching the command text so far:
         for item in list(set(state[location][SHOP])):
-            for descWord in THINGS[item][DESCWORDS]:
+            for descWord in things[item][DESCWORDS]:
                 if descWord.startswith(text):
                     possibleItems.append(descWord)
 
@@ -467,10 +474,10 @@ class TextAdventureCmd(cmd.Cmd):
             return
 
         for item in inventory:
-            if itemToSell in THINGS[item][DESCWORDS]:
+            if itemToSell in things[item][DESCWORDS]:
                 # NOTE - If you wanted to implement money, here is where you would add
                 # code that gives the player money for selling the item.
-                print('You have sold %s' % (THINGS[item][SHORTDESC]))
+                print('You have sold %s' % (things[item][SHORTDESC]))
                 inventory.remove(item)
                 return
 
@@ -490,7 +497,7 @@ class TextAdventureCmd(cmd.Cmd):
 
         # otherwise, get a list of all "description words" for inventory items matching the command text so far:
         for item in list(set(inventory)):
-            for descWord in THINGS[item][DESCWORDS]:
+            for descWord in things[item][DESCWORDS]:
                 if descWord.startswith(text):
                     possibleItems.append(descWord)
 
@@ -508,12 +515,12 @@ class TextAdventureCmd(cmd.Cmd):
         cantEat = False
 
         for item in getAllItemsMatchingDesc(itemToEat, inventory):
-            if THINGS[item].get(EDIBLE, False) == False:
+            if things[item].get(EDIBLE, False) == False:
                 cantEat = True
                 continue  # there may be other items named this that you can eat, so we continue checking
             # NOTE - If you wanted to implement hunger levels, here is where
             # you would add code that changes the player's hunger level.
-            print('You eat %s' % (THINGS[item][SHORTDESC]))
+            print('You eat %s' % (things[item][SHORTDESC]))
             inventory.remove(item)
             return
 
@@ -533,15 +540,15 @@ class TextAdventureCmd(cmd.Cmd):
 
         # otherwise, get a list of all "description words" for edible inventory items matching the command text so far:
         for item in list(set(inventory)):
-            for descWord in THINGS[item][DESCWORDS]:
-                if descWord.startswith(text) and THINGS[item].get(EDIBLE, False):
+            for descWord in things[item][DESCWORDS]:
+                if descWord.startswith(text) and things[item].get(EDIBLE, False):
                     possibleItems.append(descWord)
 
         return list(set(possibleItems))  # make list unique
 
 
 if __name__ == '__main__':
-    print('Escape from Goula!')
+    print(FSM.split('.')[0].upper().replace('-', ' ').replace('_', ' '))
     print('==================')
     print()
     displayLocation(location)
