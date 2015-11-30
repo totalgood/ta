@@ -20,9 +20,10 @@ if os.path.isfile(FSM):
     f = open(FSM, 'r')
 else:
     f = open(os.path.join('ta', FSM))
+
 with f:
     world = json.load(f)
-state = world['state']
+    state = world['state']
     things = world['things']
 
 """
@@ -548,9 +549,9 @@ class TextAdventureCmd(cmd.Cmd):
 
 
 if __name__ == '__main__':
-    print(FSM.split('.')[0].upper().replace('-', ' ').replace('_', ' '))
-    print('==================')
+    title = FSM.split('.')[0].upper().replace('-', ' ').replace('_', ' ')
+    print(title)
+    print('=' * len(title))
     print()
     displayLocation(location)
     TextAdventureCmd().cmdloop()
-
