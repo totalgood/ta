@@ -1,0 +1,5 @@
+*.bak.py
+*.orig.py
+*.broke.py
+*.works.py
+*.pyc
