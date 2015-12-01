@@ -14,6 +14,8 @@ import json
 import cmd
 import textwrap
 
+from pug.nlp.util import fuzzy_get
+
 FSM = 'the-magic-mission.json'
 
 if os.path.isfile(FSM):
@@ -61,24 +63,24 @@ def displayLocation(loc):
     print('=' * len(loc))
 
     # Print the room's description (using textwrap.wrap())
-    print('\n'.join(textwrap.wrap(state[loc]['DESC'], SCREEN_WIDTH)))
+    print('\n'.join(textwrap.wrap(fuzzy_get(fuzzy_get(state, loc), 'DESC'), SCREEN_WIDTH)))
 
     # Print all the items on the ground.
-    if len(state[loc][GROUND]) > 0:
+    if len(fuzzy_get(fuzzy_get(state, loc), GROUND)) > 0:
         print()
-        for item in state[loc][GROUND]:
+        for item in fuzzy_get(fuzzy_get(state, loc), GROUND):
             print(things[item][GROUNDDESC])
 
     # Print all the exits.
     exits = []
     for direction in ('north', 'south', 'east', 'west', 'up', 'down'):
-        if direction in state[loc].keys():
+        if direction in fuzzy_get(state, loc).keys():
             exits.append(direction.title())
     print()
     if showFullExits:
         for direction in ('north', 'south', 'east', 'west', 'up', 'down'):
-            if direction in state[location]:
-                print('%s: %s' % (direction.title(), state[location][direction]))
+            if direction in fuzzy_get(state, location):
+                print('%s: %s' % (direction.title(), fuzzy_get(fuzzy_get(state, location), direction)))
     else:
         print('Exits: %s' % ' '.join(exits))
 
@@ -87,9 +89,9 @@ def moveDirection(direction):
     """A helper function that changes the location of the player."""
     global location
 
-    if direction in state[location]:
+    if direction in fuzzy_get(state, location):
         print('You move to the %s.' % direction)
-        location = state[location][direction]
+        location = fuzzy_get(fuzzy_get(state, location), direction)
         displayLocation(location)
     else:
         print('You cannot move in that direction')
@@ -224,12 +226,12 @@ class TextAdventureCmd(cmd.Cmd):
         cantTake = False
 
         # get the item name that the player's command describes
-        for item in getAllItemsMatchingDesc(itemToTake, state[location][GROUND]):
+        for item in getAllItemsMatchingDesc(itemToTake, fuzzy_get(fuzzy_get(state, location), GROUND)):
             if things[item].get(TAKEABLE, True) == False:
                 cantTake = True
                 continue  # there may be other items named this that you can take, so we continue checking
             print('You take %s.' % (things[item][SHORTDESC]))
-            state[location][GROUND].remove(item)  # remove from the ground
+            fuzzy_get(fuzzy_get(state, location), GROUND).remove(item)  # remove from the ground
             inventory.append(item)  # add to inventory
             return
 
@@ -257,7 +259,7 @@ class TextAdventureCmd(cmd.Cmd):
         if item is not None:
             print('You drop %s.' % (things[item][SHORTDESC]))
             inventory.remove(item)  # remove from inventory
-            state[location][GROUND].append(item)  # add to the ground
+            fuzzy_get(fuzzy_get(state, location), GROUND).append(item)  # add to the ground
 
     def complete_take(self, text, line, begidx, endidx):
         possibleItems = []
@@ -265,10 +267,10 @@ class TextAdventureCmd(cmd.Cmd):
 
         # if the user has only typed "take" but no item name:
         if not text:
-            return getAllFirstDescWords(state[location][GROUND])
+            return getAllFirstDescWords(fuzzy_get(fuzzy_get(state, location), GROUND))
 
         # otherwise, get a list of all "description words" for ground items matching the command text so far:
-        for item in list(set(state[location][GROUND])):
+        for item in list(set(fuzzy_get(fuzzy_get(state, location), GROUND))):
             for descWord in things[item][DESCWORDS]:
                 if descWord.startswith(text) and things[item].get(TAKEABLE, True):
                     possibleItems.append(descWord)
@@ -311,30 +313,30 @@ class TextAdventureCmd(cmd.Cmd):
 
         if lookingAt == 'exits':
             for direction in ('north', 'south', 'east', 'west', 'up', 'down'):
-                if direction in state[location]:
-                    print('%s: %s' % (direction.title(), state[location][direction]))
+                if direction in fuzzy_get(state, location):
+                    print('%s: %s' % (direction.title(), fuzzy_get(fuzzy_get(state, location), direction)))
             return
 
         if lookingAt in ('north', 'west', 'east', 'south', 'up', 'down', 'n', 'w', 'e', 's', 'u', 'd'):
-            if lookingAt.startswith('n') and 'north' in state[location]:
-                print(state[location]['north'])
-            elif lookingAt.startswith('w') and 'west' in state[location]:
-                print(state[location]['west'])
-            elif lookingAt.startswith('e') and 'east' in state[location]:
-                print(state[location]['east'])
-            elif lookingAt.startswith('s') and 'south' in state[location]:
-                print(state[location]['south'])
-            elif lookingAt.startswith('u') and 'up' in state[location]:
-                print(state[location]['up'])
-            elif lookingAt.startswith('d') and 'down' in state[location]:
-                print(state[location]['down'])
+            if lookingAt.startswith('n') and 'north' in fuzzy_get(state, location):
+                print(fuzzy_get(fuzzy_get(state, location), 'north'))
+            elif lookingAt.startswith('w') and 'west' in fuzzy_get(state, location):
+                print(fuzzy_get(fuzzy_get(state, location), 'west'))
+            elif lookingAt.startswith('e') and 'east' in fuzzy_get(state, location):
+                print(fuzzy_get(fuzzy_get(state, location), 'east'))
+            elif lookingAt.startswith('s') and 'south' in fuzzy_get(state, location):
+                print(fuzzy_get(fuzzy_get(state, location), 'south'))
+            elif lookingAt.startswith('u') and 'up' in fuzzy_get(state, location):
+                print(fuzzy_get(fuzzy_get(state, location), 'up'))
+            elif lookingAt.startswith('d') and 'down' in fuzzy_get(state, location):
+                print(fuzzy_get(fuzzy_get(state, location), 'down'))
             else:
                 # FIXME: Use dict associating regexes with canonical spellings, which should be used here
                 print('There is nothing to the {}.'.format(lookingAt))
             return
 
         # see if the item being looked at is on the ground at this location
-        item = getFirstItemMatchingDesc(lookingAt, state[location][GROUND])
+        item = getFirstItemMatchingDesc(lookingAt, fuzzy_get(fuzzy_get(state, location), GROUND))
         if item is not None:
             print('\n'.join(textwrap.wrap(things[item][LONGDESC], SCREEN_WIDTH)))
             return
@@ -353,8 +355,8 @@ class TextAdventureCmd(cmd.Cmd):
 
         # get a list of all "description words" for each item in the inventory
         invDescWords = getAllDescWords(inventory)
-        groundDescWords = getAllDescWords(state[location][GROUND])
-        shopDescWords = getAllDescWords(state[location].get(SHOP, []))
+        groundDescWords = getAllDescWords(fuzzy_get(fuzzy_get(state, location), GROUND))
+        shopDescWords = getAllDescWords(fuzzy_get(state, location).get(SHOP, []))
 
         for descWord in invDescWords + groundDescWords + shopDescWords + [
                 'north', 'south', 'east', 'west', 'up', 'down']:
@@ -363,10 +365,10 @@ class TextAdventureCmd(cmd.Cmd):
 
         # if the user has only typed "look" but no item name, show all items on ground, shop and directions:
         if lookingAt == '':
-            possibleItems.extend(getAllFirstDescWords(state[location][GROUND]))
-            possibleItems.extend(getAllFirstDescWords(state[location].get(SHOP, [])))
+            possibleItems.extend(getAllFirstDescWords(fuzzy_get(fuzzy_get(state, location), GROUND)))
+            possibleItems.extend(getAllFirstDescWords(fuzzy_get(state, location).get(SHOP, [])))
             for direction in ('north', 'south', 'east', 'west', 'up', 'down'):
-                if direction in state[location]:
+                if direction in fuzzy_get(state, location):
                     possibleItems.append(direction)
             return list(set(possibleItems))  # make list unique
 
@@ -394,26 +396,26 @@ class TextAdventureCmd(cmd.Cmd):
 
     def do_talk_to(self, arg):
         """Start a conversation with an element of the game."""
-        if "characters" not in state[location]:
+        if "characters" not in fuzzy_get(state, location):
             print("You can only talk to animate objects!")
             return
 
         arg = arg.lower()
 
-        for item in state[location]["characters"]:
+        for item in fuzzy_get(fuzzy_get(state, location), "characters"):
             if arg == 'item':
                 print('\n'.join(textwrap.wrap(things[item][LONGDESC], SCREEN_WIDTH)))
 
     def do_list(self, arg):
         """List the items for sale at the current location's shop. "list full" will show details of the items."""
-        if SHOP not in state[location]:
+        if SHOP not in fuzzy_get(state, location):
             print("You can only list items for sale in a shop, but this isn't a shop.")
             return
 
         arg = arg.lower()
 
         print('For sale:')
-        for item in state[location][SHOP]:
+        for item in fuzzy_get(fuzzy_get(state, location), SHOP):
             print('  - %s' % (item))
             if arg == 'full':
                 print('\n'.join(textwrap.wrap(things[item][LONGDESC], SCREEN_WIDTH)))
@@ -421,7 +423,7 @@ class TextAdventureCmd(cmd.Cmd):
 
     def do_buy(self, arg):
         """"buy <item>" - buy an item at the current location's shop."""
-        if SHOP not in state[location]:
+        if SHOP not in fuzzy_get(state, location):
             print('This is not a shop.')
             return
 
@@ -431,7 +433,7 @@ class TextAdventureCmd(cmd.Cmd):
             print('Buy what? Type "list" or "list full" to see a list of items for sale.')
             return
 
-        item = getFirstItemMatchingDesc(itemToBuy, state[location][SHOP])
+        item = getFirstItemMatchingDesc(itemToBuy, fuzzy_get(fuzzy_get(state, location), SHOP))
         if item is not None:
             # NOTE - If you wanted to implement money, here is where you would add
             # code that checks if the player has enough, then deducts the price
@@ -443,7 +445,7 @@ class TextAdventureCmd(cmd.Cmd):
         print('"%s" is not sold here. Type "list" or "list full" to see a list of items for sale.' % (itemToBuy))
 
     def complete_buy(self, text, line, begidx, endidx):
-        if SHOP not in state[location]:
+        if SHOP not in fuzzy_get(state, location):
             return []
 
         itemToBuy = text.lower()
@@ -451,10 +453,10 @@ class TextAdventureCmd(cmd.Cmd):
 
         # if the user has only typed "buy" but no item name:
         if not itemToBuy:
-            return getAllFirstDescWords(state[location][SHOP])
+            return getAllFirstDescWords(fuzzy_get(fuzzy_get(state, location), SHOP))
 
         # otherwise, get a list of all "description words" for shop items matching the command text so far:
-        for item in list(set(state[location][SHOP])):
+        for item in list(set(fuzzy_get(fuzzy_get(state, location), SHOP))):
             for descWord in things[item][DESCWORDS]:
                 if descWord.startswith(text):
                     possibleItems.append(descWord)
@@ -464,7 +466,7 @@ class TextAdventureCmd(cmd.Cmd):
 
     def do_sell(self, arg):
         """"sell <item>" - sell an item at the current location's shop."""
-        if SHOP not in state[location]:
+        if SHOP not in fuzzy_get(state, location):
             print('This is not a shop.')
             return
 
@@ -486,7 +488,7 @@ class TextAdventureCmd(cmd.Cmd):
 
 
     def complete_sell(self, text, line, begidx, endidx):
-        if SHOP not in state[location]:
+        if SHOP not in fuzzy_get(state, location):
             return []
 
         itemToSell = text.lower()
